@@ -1,21 +1,29 @@
 {% extends "main_page_module/base.html" %}
 
 {% block extraheader %}
+<script>
+  function update_db_f(){
+      document.getElementById("update_db_b").disabled = true;
+
+      var loadingSpinner = document.createElement("div");
+      loadingSpinner.setAttribute('class', 'd-flex align-items-center');
+      loadingSpinner.innerHTML = "<b>Loading...</b>";
+
+      var insideSpinner = document.createElement("div");
+      insideSpinner.setAttribute('class', 'spinner-border ml-auto');
+      insideSpinner.setAttribute('role', 'status');
+      insideSpinner.setAttribute('aria-hidden', 'true');
+
+      loadingSpinner.appendChild(insideSpinner);
+      document.getElementById("results").appendChild(loadingSpinner);
+
+      
+
+  }
+</script>
 {% endblock extraheader  %}
 
 {% block nav_index %}active{% endblock nav_index %}
-
-{% block nav_login_out %}
-  {% if session['user_id'] %}
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('main_page_module.logout') }}">Logout </a>
-    </li>
-  {% else %}
-    <li class="nav-item">
-      <a class="nav-link" href="{{ url_for('main_page_module.login') }}">Login </a>
-    </li>
-  {% endif %}
-{% endblock nav_login_out %}
 
 
 {% block flashes %}
@@ -42,8 +50,80 @@
 
 
 {% block content%}
-<h1>Hello, world!</h1>
-<p>This is the index page of the...page!</p>
+<hr>
+<h1>Hello, there!</h1>
+<input class="form-control mr-sm-2" id ="search" type="search" placeholder="Search" size="50" aria-label="Search" autofocus="">
+<hr>
+<div class="container">
+  <div id="results">
+    <h4>Welcome to the Medjed app details for the Open Store, Ubuntu Touch.</h4>
+    <p>This app was created to ease the was we scavange code for UT apps, as there is a lack of documentation on the internet.</p>
+    <p><b>Now search something!</b></p>
+  </div>
+</div>
+<script>
+  
+  function load_results(){
+    var search_key = document.getElementById("search").value;
 
+    var results=[];
+
+    $.post('/search/', {"key": search_key}, function(data, textStatus) {
+      //data contains the JSON object
+      //textStatus contains the status: success, error, etc
+
+      var searchResults = document.createElement("div");
+      searchResults.setAttribute('class', 'container');
+      var count = Object(data);
+      console.log(count);
+
+      if (0 < Object.keys(data).length) {
+
+        for (const [key, value] of Object.entries(data)) {
+          var newMedia = document.createElement("div")
+          newMedia.setAttribute('class', 'media  bg-light');
+
+          var newBodyLink = document.createElement("a")
+          newBodyLink.setAttribute('class', 'btn btn-secondary align-self-center mr-3');
+          newBodyLink.setAttribute('href', '/view_entry/' + value[0]);
+          newBodyLink.textContent = "View the content";
+
+          var newBody = document.createElement("div")
+          newBody.setAttribute('class', 'media-body');
+
+          var newBodyTitle = document.createElement("h5")
+          newBodyTitle.setAttribute('class', 'mt-0');
+          newBodyTitle.textContent = key;
+          var newBodyText = document.createElement("p")
+          newBodyText.innerHTML = value[1];
+
+          var line = document.createElement("hr")
+          
+          newBody.appendChild(newBodyTitle);
+          newBody.appendChild(newBodyText);
+          
+          newMedia.appendChild(newBodyLink);
+          newMedia.appendChild(newBody);
+          
+          searchResults.appendChild(newMedia);
+          searchResults.appendChild(line);
+          
+        }
+
+      } else {
+        var noResults = document.createElement("p")
+        noResults.textContent = "We searched high and low, and we found nothing... its clearly because you were not specific enough.";
+        searchResults.appendChild(noResults);
+      }
+
+      $("#results").empty();
+      document.getElementById("results").appendChild(searchResults);
+    }, "json");
+
+  };
+
+  document.getElementById("search").onkeyup = load_results;
+
+</script>
 
 {% endblock content %}

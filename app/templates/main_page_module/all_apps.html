@@ -1,0 +1,77 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<!-- datatables style -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.20/datatables.min.css"/>
+{% endblock extraheader  %}
+
+{% block nav_all_apps %}active{% endblock nav_all_apps %}
+
+
+{% block flashes %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div>
+        {% for category, message in messages %}
+          {% if category == "error" %}
+            <div class="alert alert-danger" role="alert">
+              {{ message }}
+            </div>
+          {% else %}
+            <div class="alert alert-success" role="alert">
+              {{ message }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <br>
+    {% endif %}
+  {% endwith %}
+{% endblock flashes %}
+
+
+{% block content%}
+
+<legend>All Apps</legend>
+
+<div id="all_entries" class="container">
+  <table id="all_apps" class="display" style="width:100%" class="table table-dark">
+    <thead>
+      <tr>
+          <th>Name</th>
+          <th>Language</th>
+          <th>Category</th>
+          <th>Author</th>
+          <th>Description</th>
+          <th>Source</th>
+          <th></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for i in apps%}
+        <tr>
+          <td>{{ i.app_name }}</td>
+          <td>Language</td>
+          <td>{{ i.app_author }}</td>
+          <td>{{ i.app_category }}</td>
+          <td>{{ i.app_description[:50] }}</td>
+          <td>{{ i.app_source }}</td>
+          <td>View</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<hr>
+
+{% endblock content %}
+
+{% block extrafooter %}
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.3.1/dt-1.10.20/datatables.min.js"></script>
+<script>
+  $(document).ready(function() {
+      $('#all_apps').DataTable();
+  } );
+  </script>   
+{% endblock extrafooter %}

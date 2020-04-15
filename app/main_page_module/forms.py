@@ -2,7 +2,7 @@
 from flask_wtf import FlaskForm # , RecaptchaField
 
 # Import Form elements such as TextField and BooleanField (optional)
-from wtforms import StringField, PasswordField, SubmitField, validators # BooleanField
+from wtforms import BooleanField, StringField, TextAreaField, PasswordField, HiddenField, SubmitField, validators # BooleanField
 
 # Import Form validators
 from wtforms.validators import Email, EqualTo, ValidationError
@@ -11,16 +11,24 @@ from app.main_page_module.models import User
 
 #email verification
 import re
-
-
-# Define the login form (WTForms)
+import os.path
 
 class LoginForm(FlaskForm):
     username_or_email = StringField('Username or Email', [validators.InputRequired(message='Forgot your email address?')])
     password = PasswordField('Password', [validators.InputRequired(message='Must provide a password.')])
+    remember = BooleanField()
     
     submit = SubmitField('Login')
-    
+
+class EditUserForm(FlaskForm):
+
+    id = HiddenField('id', [validators.InputRequired(message='Dont fiddle around with the code!')])
+    name   = StringField('Name', [validators.InputRequired(message='We need a name for the user.')])
+    email    = StringField('Email', [validators.InputRequired(message='We need an email for your account.')])
+    password  = PasswordField('Password')    
+    password_2 = PasswordField('Repeat password', [EqualTo('password', message='Passwords must match')])
+      
+    submit = SubmitField('Submit changes')
     
 
 class RegisterForm(FlaskForm):
