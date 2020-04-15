@@ -50,12 +50,12 @@
     <tbody>
         {% for i in apps%}
         <tr>
-          <td>{{ i.app_name }}</td>
-          <td>Language</td>
-          <td>{{ i.app_author }}</td>
-          <td>{{ i.app_category }}</td>
-          <td>{{ i.app_description[:50] }}</td>
-          <td>{{ i.app_source }}</td>
+          <td>{{ i[0].app_name }}</td>
+          <td>{{ i[1] }}</td>
+          <td>{{ i[0].app_author }}</td>
+          <td>{{ i[0].app_category }}</td>
+          <td>{{ i[0].app_description[:50] }}</td>
+          <td>{{ i[0].app_source }}</td>
           <td>View</td>
         </tr>
         {% endfor %}

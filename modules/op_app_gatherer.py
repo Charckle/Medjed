@@ -9,11 +9,13 @@ import modules.argus
 def sort_languages(languages):
     languages = [i.lower().capitalize() for i in languages]
     print(languages)
+    '''
     if "Html" in languages:
         languages.remove("Html")
 
     if "Css" in languages:
         languages.remove("Css")
+    '''
     
     if "Qml" in languages:
         languages.remove("Qml")    

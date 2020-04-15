@@ -3,11 +3,12 @@
 {% block extraheader %}
 <script>
   function update_db_f(){
+      $("#results").empty();
       document.getElementById("update_db_b").disabled = true;
 
       var loadingSpinner = document.createElement("div");
       loadingSpinner.setAttribute('class', 'd-flex align-items-center');
-      loadingSpinner.innerHTML = "<b>Loading...</b>";
+      loadingSpinner.innerHTML = "<b>Loading apps from the Open Store...</b>";
 
       var insideSpinner = document.createElement("div");
       insideSpinner.setAttribute('class', 'spinner-border ml-auto');

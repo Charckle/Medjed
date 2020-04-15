@@ -99,4 +99,20 @@ class App(Base):
     def __repr__(self):
         return '<User %r>' % (self.app_name)
     
+# Define a User model
+class Language(Base):
+    __tablename__ = 'languages_table'
+
+    # app id
+    app_id    = db.Column(db.String(128),  nullable=False)
+    # app name
+    language   = db.Column(db.String(128),  nullable=False)     
     
+    # New instance instantiation procedure
+    def __init__(self, app_id, language):
+
+        self.app_id   = app_id
+        self.language = language
+
+    def __repr__(self):
+        return '<User %r>' % (self.language)

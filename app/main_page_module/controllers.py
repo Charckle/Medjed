@@ -8,7 +8,7 @@ from app import db
 from app.main_page_module.forms import LoginForm, RegisterForm, EditUserForm
 
 # Import module models (i.e. User)
-from app.main_page_module.models import User, App
+from app.main_page_module.models import User, App, Language
 #import os
 import re
 import os
@@ -47,18 +47,30 @@ def index():
 # Set the route and accepted methods
 @main_page_module.route('/all_apps', methods=['GET'])
 def all_apps():
-    
     apps = App.query.all()
     
+    apps_n_languages = []
+    for app in apps:
+        app_bucket = []
+        languages_ofapp = []
+        
+        for lang in Language.query.filter_by(app_id=app.app_id):
+            languages_ofapp.append(lang.language)
+        
+        app_bucket.append(app)
+        app_bucket.append(", ".join(languages_ofapp))
+                          
+        apps_n_languages.append(app_bucket)
+    
 
-    return render_template("main_page_module/all_apps.html", apps = apps)
+    return render_template("main_page_module/all_apps.html", apps = apps_n_languages)
 
 # Set the route and accepted methods
 @main_page_module.route('/update_db', methods=['post'])
-def update_db():
-    if check_login(): return redirect(url_for("main_page_module.login"))  
 
+def update_db():
     apps = oag.get_app_details_All()
+    print(len(apps))
     
     language = "Unknown"
     for app_details in apps:
@@ -70,6 +82,10 @@ def update_db():
         elif "gitlab" in app_details["source"]:
             languages = oag.sort_languages(oag.get_gitlab_languages(app_details["source"]))
         print(languages)
+        
+        for lang in languages:
+            db_lang = Language(app_details["id"], lang)
+            db.session.add(db_lang)
         
         app_db = App(app_details["id"], app_details["name"], app_details["author"], app_details["maintainer"], app_details["category"], 
                      app_details["license"], app_details["description"], app_details["source"])
@@ -163,8 +179,6 @@ def login():
 
     # If sign in form is submitted
     form = LoginForm(request.form)
-    
-    
 
     # Verify the sign in form
     if form.validate_on_submit():
