@@ -53,7 +53,23 @@
 {% block content%}
 <hr>
 <h1>Hello, there!</h1>
-<input class="form-control mr-sm-2" id ="search" type="search" placeholder="Search" size="50" aria-label="Search" autofocus="">
+<span class="badge badge-danger">Number of apps in the DB: {{ all_apps_num }}</span>
+<span class="badge badge-dark">Number of distinct languages: {{ number_lan }}</span>
+<br>
+<br>
+
+<div class="input-group">
+  <input class="form-control" id ="search" type="search" placeholder="Search" size="50" aria-label="Search" autofocus="">
+  <div class="input-group-append">
+    <select class="custom-select" id="choosen_languages">
+      <option value="nothing" selected>Choose language</option>
+      {% for language in lan %}
+      <option value="{{ language }}">{{ language }}</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
 <hr>
 <div class="container">
   <div id="results">
@@ -66,10 +82,11 @@
   
   function load_results(){
     var search_key = document.getElementById("search").value;
+    var language_key = document.getElementById("choosen_languages").value;
 
     var results=[];
 
-    $.post('/search/', {"key": search_key}, function(data, textStatus) {
+    $.post('/search/', {"key": search_key, "language_key": language_key}, function(data, textStatus) {
       //data contains the JSON object
       //textStatus contains the status: success, error, etc
 
@@ -86,7 +103,7 @@
 
           var newBodyLink = document.createElement("a")
           newBodyLink.setAttribute('class', 'btn btn-secondary align-self-center mr-3');
-          newBodyLink.setAttribute('href', '/view_entry/' + value[0]);
+          newBodyLink.setAttribute('href', '/view_entry/' + key);
           newBodyLink.textContent = "View the content";
 
           var newBody = document.createElement("div")
@@ -94,7 +111,7 @@
 
           var newBodyTitle = document.createElement("h5")
           newBodyTitle.setAttribute('class', 'mt-0');
-          newBodyTitle.textContent = key;
+          newBodyTitle.textContent = value[0];
           var newBodyText = document.createElement("p")
           newBodyText.innerHTML = value[1];
 
@@ -124,6 +141,7 @@
   };
 
   document.getElementById("search").onkeyup = load_results;
+  document.getElementById("choosen_languages").onchange = load_results;
 
 </script>
 

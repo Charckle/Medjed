@@ -40,9 +40,35 @@ def login_required(f):
 # Set the route and accepted methods
 @main_page_module.route('/', methods=['GET'])
 def index():
+    #number of languages
+    all_languages = list(Language.query.all())
+    lan = [lan.language for lan in all_languages]
+    lan = set(lan)
+    lan = list(lan)
+    lan.sort()
+    number_lan = len(lan)
+    
+    #number of apps
+    all_apps_num = [lan.app_id for lan in all_languages]
+    all_apps_num = len(set(all_apps_num))
+    
+    #number_lan = Language.query.distinct(Language.language)
+    #number_lan = db.query(Language.language).distinct() #len(db.session.query(Language.language).distinct())
+    
+    return render_template("main_page_module/index.html", number_lan=number_lan, all_apps_num=all_apps_num, lan=lan)
 
-    return render_template("main_page_module/index.html")
 
+@main_page_module.route('/search/', methods=['POST'])
+def searc_results():
+    key = request.form["key"]
+    key_language = request.form["language_key"]
+    
+    apps_id = [language.app_id for language in Language.query.filter_by(language=key_language)]
+    
+    apps = App.query.filter(App.app_id.in_(apps_id), App.app_description.like(f'%{key}%')).all()
+    results = {app.app_id: [app.app_name, app.app_description] for app in apps}
+    
+    return jsonify(results)
 
 # Set the route and accepted methods
 @main_page_module.route('/all_apps', methods=['GET'])
