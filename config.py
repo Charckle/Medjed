@@ -21,7 +21,8 @@ class Config(object):
     CSRF_ENABLED     = True
     
 class ProductionConfig(Config):
-    pass
+    SQLALCHEMY_DATABASE_URI = "sqlite:///users.sqlite3"
+    QLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DevelopmentConfig(Config):
     DEBUG = True

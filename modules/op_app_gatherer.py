@@ -4,7 +4,6 @@ from requests.exceptions import RequestException
 from contextlib import closing
 from bs4 import BeautifulSoup
 import json
-import modules.argus
 
 def sort_languages(languages):
     languages = [i.lower().capitalize() for i in languages]
