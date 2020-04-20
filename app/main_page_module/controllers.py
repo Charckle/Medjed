@@ -14,7 +14,6 @@ import re
 import os
 from functools import wraps
 
-from modules.argus import WSearch
 import modules.op_app_gatherer as oag
 
 
@@ -263,6 +262,7 @@ def logout():
 
 # Set the route and accepted methods
 @main_page_module.route('/register/', methods=['GET', 'POST'])
+#remove this to create new users
 @login_required
 def register():
     #insert check, if the user is already logged in

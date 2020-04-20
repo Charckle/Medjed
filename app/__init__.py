@@ -11,7 +11,7 @@ from flaskext.markdown import Markdown
 app = Flask(__name__)
 
 # Configurations
-app.config.from_object("config.DevelopmentConfig")
+app.config.from_object("config.ProductionConfig")
 
 Markdown(app)
 
