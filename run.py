@@ -1,7 +1,9 @@
 # Run a test server.
 from app import app
 
-app.run()
+application = app
+
+application.run()
 
 
 
