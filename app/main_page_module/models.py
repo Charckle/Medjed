@@ -2,7 +2,7 @@
 from app import db
 
 # Import password / encryption helper tools
-from werkzeug import check_password_hash, generate_password_hash
+from werkzeug.security  import check_password_hash, generate_password_hash
 
 # Define a base model for other database tables to inherit
 class Base(db.Model):
