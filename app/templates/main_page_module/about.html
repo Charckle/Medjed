@@ -1,0 +1,99 @@
+{% extends "main_page_module/base.html" %}
+
+{% block extraheader %}
+<!-- datatables style -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.20/datatables.min.css"/>
+{% endblock extraheader  %}
+
+{% block nav_about %}active{% endblock nav_about %}
+
+
+{% block flashes %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div>
+        {% for category, message in messages %}
+          {% if category == "error" %}
+            <div class="alert alert-danger" role="alert">
+              {{ message }}
+            </div>
+          {% else %}
+            <div class="alert alert-success" role="alert">
+              {{ message }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <br>
+    {% endif %}
+  {% endwith %}
+{% endblock flashes %}
+
+
+{% block content%}
+
+<h2>About</h2>
+<hr>
+
+
+<div class="row">
+  <div class="col-3">
+    <div id="list-about" class="list-group">
+      <a class="list-group-item list-group-item-action" href="#list-item-1">About the page</a>
+      <a class="list-group-item list-group-item-action" href="#list-item-2">OpenStore API</a>
+    </div>
+  </div>
+  <div class="col-9">
+    <div data-spy="" data-target="#list-about" data-offset="0">
+        <h3 id="list-item-1">About the page</h3>
+        <hr>
+          <h4>Problem</h4>
+          <p>Documentation for app ceration on Ubuntu Touch is not yet what one would hope it were. Because of this, one has to search in other apps to see how development is done.</p>
+          <br>
+          <h4>Solution</h4>
+          <p>Create a platform, where is easier to search among apps on the Open Store, by the language they were written in.</p>
+          <br>
+          <h4>Thoughts</h4>
+          <p>I came up with what I hope is a good solution. Its not perfect, there are still problems, as there are some pages that don't yet have implemented language detection. It is planned, but for this proof of concept I thought detection from the two main git webpages was a good enough start.</p>
+          <p>More details when displaying searched apps is something I am thinking of implementing in the future, if the app is viable and usefull. Another thing is a local app view page, as now there is a link to the OpenStore app page, where you can get all the info about the app.</p>
+          <br>
+          <h4>Help</h4>
+          <p>If you find this page usefull, if you have any suggestions, advice, etc, please contact me on <a href="mailto:andrej.zubin@email.com"><b>my email</b></a> and let me know.</p>
+          
+          <hr>
+        <h3 id="list-item-2">OpenStore API</h3>
+        <p>There is a lack of documentation on the OpenStore API. The current method is to lookup the OpenStore code and see how it works.</p>
+        <p>This is how I managed to interact with the API using python:</p>
+        <pre>
+            import requests
+            import json
+
+            URL = "https://open-store.io/api/v4/apps"
+    
+            r = requests.get(URL)
+           
+            json_apps = json.loads(r.text)
+        </pre>
+        <p>Where it will give me all the apps listed on the page.</p>
+        <p>Once we get the apps data, we can look at it to see the characteristics based on which we can filter the apps. An example would be if we added arguments to search for just the genuine Ubuntu Touch apps that are also listed under the category "games". This is the arguments that we would add:</p>
+        <pre>
+          URL = "https://open-store.io/api/v4/apps?type=app&?category=games"
+        </pre>
+        <br>
+        <h4>App details</h4>
+        <p>Now, the structure above will give us a json list of all the apps that match our criteria. But this will only give us limited details for each app.</p>
+        <p>For more details we access the API for a single app like this:</p>
+        <pre>
+          URL = "https://open-store.io/api/v4/apps/{app_id}"
+        </pre>
+        <p>Where the "app_id" is the ID you get from the app with the first API request.</p>
+        <br>
+        <p><b>Now you know the basics of the Open Store API. Have a good day!</b></p>
+        <hr>
+      </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}

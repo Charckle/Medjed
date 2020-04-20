@@ -62,7 +62,7 @@
   <input class="form-control" id ="search" type="search" placeholder="Search" size="50" aria-label="Search" autofocus="">
   <div class="input-group-append">
     <select class="custom-select" id="choosen_languages">
-      <option value="nothing" selected>Choose language</option>
+      <option value="all_languages" selected>All languages</option>
       {% for language in lan %}
       <option value="{{ language }}">{{ language }}</option>
       {% endfor %}
@@ -74,7 +74,7 @@
 <div class="container">
   <div id="results">
     <h4>Welcome to the Medjed app details for the Open Store, Ubuntu Touch.</h4>
-    <p>This app was created to ease the was we scavange code for UT apps, as there is a lack of documentation on the internet.</p>
+    <p>This app was created to ease the way we scavange code for UT apps, as there is a lack of documentation on the internet.</p>
     <p><b>Now search something!</b></p>
   </div>
 </div>
@@ -103,8 +103,14 @@
 
           var newBodyLink = document.createElement("a")
           newBodyLink.setAttribute('class', 'btn btn-secondary align-self-center mr-3');
-          newBodyLink.setAttribute('href', '/view_entry/' + key);
-          newBodyLink.textContent = "View the content";
+          newBodyLink.setAttribute('href', 'https://open-store.io/app/' + key);
+         // newBodyLink.textContent = "View the content";
+
+         var newBodyImage = document.createElement("img")
+         newBodyImage.setAttribute('src', value[2]);
+         newBodyImage.setAttribute('height', '64');
+         newBodyImage.setAttribute('width', '64');
+         newBodyLink.appendChild(newBodyImage);
 
           var newBody = document.createElement("div")
           newBody.setAttribute('class', 'media-body');

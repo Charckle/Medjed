@@ -43,7 +43,6 @@
           <th>Category</th>
           <th>Author</th>
           <th>Description</th>
-          <th>Source</th>
           <th></th>
       </tr>
     </thead>
@@ -55,8 +54,7 @@
           <td>{{ i[0].app_category }}</td>
           <td>{{ i[0].app_author }}</td>
           <td>{{ i[0].app_description[:50] }}</td>
-          <td>{{ i[0].app_source }}</td>
-          <td>View</td>
+          <td><a href="https://open-store.io/app/{{ i[0].app_id }}">OS Page</a></td>
         </tr>
         {% endfor %}
     </tbody>

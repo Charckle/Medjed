@@ -82,10 +82,12 @@ class App(Base):
     app_description    = db.Column(db.String(500),  nullable=False)
     
     # app source
-    app_source    = db.Column(db.String(128),  nullable=True)    
+    app_source    = db.Column(db.String(128),  nullable=True)
+    # app icon
+    app_icon    = db.Column(db.String(128),  nullable=True)       
 
     # New instance instantiation procedure
-    def __init__(self, app_id, app_name, app_author, app_maintainer, app_category, app_license, app_description, app_source):
+    def __init__(self, app_id, app_name, app_author, app_maintainer, app_category, app_license, app_description, app_source, app_icon):
 
         self.app_id     = app_id
         self.app_name = app_name
@@ -94,7 +96,8 @@ class App(Base):
         self.app_category = app_category
         self.app_license = app_license
         self.app_description = app_description
-        self.app_source = app_source     
+        self.app_source = app_source
+        self.app_icon = app_icon     
 
     def __repr__(self):
         return '<User %r>' % (self.app_name)

@@ -7,9 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <style>
 
-    </style>
     {% block extraheader %}
     {% endblock extraheader %}
 
@@ -31,6 +29,9 @@
                     </li>
                     <li class="nav-item {% block nav_all_apps %}{% endblock nav_all_apps %}">
                         <a class="nav-link" href="{{ url_for('main_page_module.all_apps') }}">All Apps </a>
+                    </li>
+                    <li class="nav-item {% block nav_about %}{% endblock nav_about %}">
+                        <a class="nav-link" href="{{ url_for('main_page_module.about') }}">Abouts </a>
                     </li>
                     {% if session['user_id'] %}
                     <li class="nav-item {% block nav_all_users %}{% endblock nav_all_users %}">
@@ -63,6 +64,7 @@
     <div class="container" style="background-color: rgb(255, 255, 255)">
         {% block content %}
         {% endblock %}
+        
     </div>
     
 

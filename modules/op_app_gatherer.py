@@ -8,22 +8,22 @@ import modules.argus
 
 def sort_languages(languages):
     languages = [i.lower().capitalize() for i in languages]
-    print(languages)
+    #print(languages)
     '''
     if "Html" in languages:
         languages.remove("Html")
 
     if "Css" in languages:
         languages.remove("Css")
-    '''
+    
     
     if "Qml" in languages:
         languages.remove("Qml")    
-    
-    print(languages)
+    '''
+    #print(languages)
     
     if len(languages) == 0:
-        languages.append("Only markup languages")
+        languages.append("No languages")
     
     return languages
 
@@ -43,7 +43,7 @@ def get_all_apps():
     
 
 def get_app_details(app_id):
-    os_url = f"https://open-store.io/api/v4/apps/{app_id}?channel=xenial"
+    os_url = f"https://open-store.io/api/v4/apps/{app_id}"
     
     r = requests.get(os_url)
 
@@ -70,6 +70,7 @@ def get_app_details_All():
         app_details["license"] = apps_data["data"]["license"]
         app_details["description"] = apps_data["data"]["manifest"]["description"]
         app_details["source"] = apps_data["data"]["source"]
+        app_details["icon"] = apps_data["data"]["icon"]
         
         #and apends them to the main list of apps
         all_apps_details.append(app_details)
@@ -110,7 +111,13 @@ def log_error(e):
     print(e)
 
 def get_github_languages(html):
-    print(html)
+    html = html
+    
+    if "/tree/" in html:
+        html = html.split("/")
+        html = html[:-3]
+        html = "/".join(html)
+        print(html)
     
     languages = []
     
@@ -139,7 +146,7 @@ def get_gitlab_languages(html):
         html = html.split("/")
         html = html[:-2]
         html = "/".join(html)
-    print(html)
+    #print(html)
     '''
     if "/tree/exp" in html:
         html = html[0:-9]
@@ -195,6 +202,6 @@ def main_process():
 
 if __name__ == "__main__":    
     main_process()
-    
+
         
     

@@ -58,15 +58,29 @@ def index():
     return render_template("main_page_module/index.html", number_lan=number_lan, all_apps_num=all_apps_num, lan=lan)
 
 
+# Set the route and accepted methods
+@main_page_module.route('/about/', methods=['GET'])
+def about():
+
+    
+    return render_template("main_page_module/about.html")
+
+
 @main_page_module.route('/search/', methods=['POST'])
 def searc_results():
     key = request.form["key"]
     key_language = request.form["language_key"]
+    apps = None
     
-    apps_id = [language.app_id for language in Language.query.filter_by(language=key_language)]
-    
-    apps = App.query.filter(App.app_id.in_(apps_id), App.app_description.like(f'%{key}%')).all()
-    results = {app.app_id: [app.app_name, app.app_description] for app in apps}
+    if key_language != "all_languages":
+        apps_id = [language.app_id for language in Language.query.filter_by(language=key_language)]
+        
+        apps = App.query.filter(App.app_id.in_(apps_id), App.app_description.like(f'%{key}%')).all()
+                
+    else:
+        apps = App.query.filter(App.app_description.like(f'%{key}%')).all()
+        
+    results = {app.app_id: [app.app_name, app.app_description, app.app_icon] for app in apps}        
     
     return jsonify(results)
 
@@ -94,13 +108,17 @@ def all_apps():
 # Set the route and accepted methods
 @main_page_module.route('/update_db', methods=['post'])
 
-def update_db():
+def update_db():    
     apps = oag.get_app_details_All()
     print(len(apps))
+    db.session.query(App).delete()
+    db.session.query(Language).delete()
+    db.session.commit()    
     
-    language = "Unknown"
+    languages = None
     for app_details in apps:
         print(app_details["name"])
+        languages = ["Unknown"]
         
         if "github" in app_details["source"]:
             languages = oag.sort_languages(oag.get_github_languages(app_details["source"]))
@@ -114,7 +132,7 @@ def update_db():
             db.session.add(db_lang)
         
         app_db = App(app_details["id"], app_details["name"], app_details["author"], app_details["maintainer"], app_details["category"], 
-                     app_details["license"], app_details["description"], app_details["source"])
+                     app_details["license"], app_details["description"], app_details["source"], app_details["icon"])
         db.session.add(app_db)
     
     db.session.commit()
@@ -245,6 +263,7 @@ def logout():
 
 # Set the route and accepted methods
 @main_page_module.route('/register/', methods=['GET', 'POST'])
+@login_required
 def register():
     #insert check, if the user is already logged in
     form = RegisterForm(request.form)
